@@ -4,12 +4,14 @@ KERNEL_ELF := kernel.elf
 ISO := os.iso
 QEMU := qemu-system-x86_64
 
+QEMUFLAGS := -boot order=d -m 32M -serial stdio -display sdl
+
 .PHONY:
 all: $(ISO)
 
 .PHONY:
 run: $(ISO)
-	$(QEMU) -cdrom $< -boot order=d -m 32M
+	$(QEMU) $(QEMUFLAGS) -cdrom $<
 
 $(ISO): $(BOOT)/$(KERNEL_ELF)	
 	mkisofs -R \
@@ -19,7 +21,7 @@ $(ISO): $(BOOT)/$(KERNEL_ELF)
             -A os                           \
             -input-charset utf8             \
             -boot-info-table                \
-            -o os.iso                       \
+            -o $@	                        \
             iso
 
 $(BOOT)/$(KERNEL_ELF): $(KERNEL)/$(KERNEL_ELF)

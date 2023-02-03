@@ -3,8 +3,7 @@ LINK_SCRIPT := link.ld
 KERNEL_ELF := kernel.elf
 
 SOURCES := $(wildcard *.[cs])
-OBJECTS := $(patsubst %.c, %.o, $(SOURCES))
-OBJECTS := $(patsubst %.s, %.o, $(OBJECTS))
+OBJECTS := $(patsubst %, %.o, $(SOURCES))
 
 # assembler, compiler flags
 CC = gcc
@@ -20,10 +19,10 @@ all: $(KERNEL_ELF)
 $(KERNEL_ELF): $(OBJECTS)
 	ld $(LDFLAGS) $^ -o $(KERNEL_ELF)
 
-%.o: %.c
+%.c.o: %.c
 	$(CC) $(CFLAGS) $< -o $@
 
-%.o: %.s
+%.s.o: %.s
 	$(AS) $(ASFLAGS) $< -o $@
 
 .PHONY:

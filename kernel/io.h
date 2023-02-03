@@ -21,6 +21,11 @@
 #define FB_LT_BROWN    14
 #define FB_WHITE       15
 
+#define FB_WIDTH 80
+#define FB_HEIGHT 25
+
+#define FB_TABSIZE 4
+
 // The I/O ports
 #define FB_COMMAND_PORT         0x3D4
 #define FB_DATA_PORT            0x3D5
@@ -34,7 +39,12 @@ uint8_t inb(uint16_t port);
 
 void fb_write_cell(uint32_t i, char c, uint8_t fg, uint8_t bg);
 void fb_move_cursor(uint16_t pos);
+uint16_t fb_cursor_pos(void);
+
+void fb_scroll(void);
 
 int fb_write(const char* buf, uint32_t len);
+int fb_puts(const char* buf);
+void fb_init(void);
 
 #endif /* KERNEL_IO_H */

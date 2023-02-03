@@ -18,6 +18,18 @@ loader:
     extern kmain
     call kmain ; call kernel main function
 
+global load_gdt
+load_gdt:
+    mov eax, [esp + 4]
+    lgdt [eax]
+    ret
+
+global load_idt
+load_idt:
+    mov eax, [esp + 4]
+    lidt [eax]
+    ret
+
 section .bss
 align 4
 kernel_stack:
