@@ -6,7 +6,7 @@ __attribute__((__noreturn__)) void abort(void)
 #if defined(__is_libk)
     // TODO: add kernel panic
     printf("kernel: panic: abort()\n");
-    asm volatile("hlt");
+    asm volatile("cli;hlt");
 #else
     // TODO
     printf("abort()\n");

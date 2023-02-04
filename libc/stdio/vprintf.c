@@ -64,7 +64,7 @@ int vprintf(const char* restrict format, va_list parameters) {
 		} else if (*format == 'd' || *format == 'i') {
 			format++;
 			int i = (int) va_arg(parameters, int);
-			int len = itoa(i, strbuf, 10);
+			unsigned int len = itoa(i, strbuf, 10);
 			if(maxrem < len) {
 				// TODO: Set errno to EOVERFLOW.
 			}
@@ -74,7 +74,7 @@ int vprintf(const char* restrict format, va_list parameters) {
 		} else if (*format == 'x') {
 			format++;
 			unsigned int i = (unsigned int) va_arg(parameters, int);
-			int len = utoa(i, strbuf, 16);
+			unsigned int len = utoa(i, strbuf, 16);
 			if(maxrem < len) {
 				// TODO: Set errno to EOVERFLOW.
 			}
@@ -84,7 +84,7 @@ int vprintf(const char* restrict format, va_list parameters) {
 		} else if (*format == 'u') {
 			format++;
 			unsigned int i = (unsigned int) va_arg(parameters, int);
-			int len = utoa(i, strbuf, 10);
+			unsigned int len = utoa(i, strbuf, 10);
 			if(maxrem < len) {
 				// TODO: Set errno to EOVERFLOW.
 			}
@@ -94,7 +94,7 @@ int vprintf(const char* restrict format, va_list parameters) {
 		} else if (*format == 'o') {
 			format++;
 			unsigned int i = (unsigned int) va_arg(parameters, int);
-			int len = utoa(i, strbuf, 8);
+			unsigned int len = utoa(i, strbuf, 8);
 			if(maxrem < len) {
 				// TODO: Set errno to EOVERFLOW.
 			}
