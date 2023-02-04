@@ -1,6 +1,5 @@
 #include "log.h"
-#include "io.h"
-#include <stdarg.h>
+#include "../io.h"
 #include <stdio.h>
 
 static void klog_severity(enum klog_severity severity)
@@ -22,6 +21,9 @@ static void klog_severity(enum klog_severity severity)
     case KLOG_FAIL:
         fb_color(FB_LT_RED, FB_BLACK);
         fb_write("FAIL", 4);
+        break;
+    default:
+        break;
     }
 }
 

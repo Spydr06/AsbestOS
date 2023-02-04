@@ -1,7 +1,7 @@
 #include "io.h"
-#include "serial.h"
+#include "serial/serial.h"
 #include <string.h>
-#include "log.h"
+#include "log/log.h"
 
 uint8_t* fb = (uint8_t*) 0x000B8000;
 uint16_t cursor_pos = 0;

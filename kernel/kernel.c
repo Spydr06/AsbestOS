@@ -1,7 +1,7 @@
-#include "io.h"
-#include "serial.h"
+#include "io/io.h"
+#include "io/serial/serial.h"
+#include "io/log/log.h"
 #include <stdio.h>
-#include "log.h"
 
 #if !defined(__i386__)
     #error "Expected x86 architecture"

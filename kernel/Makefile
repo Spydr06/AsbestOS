@@ -5,7 +5,7 @@ LIBK := libk.a
 
 BUILDDIR := .build
 
-SOURCES := $(wildcard *.[cs])
+SOURCES := $(shell find . -name "*.c" -or -name "*.s")
 OBJECTS := $(patsubst %, $(BUILDDIR)/%.o, $(SOURCES))
 
 LIBK_INCLUDE := ../libc/include
