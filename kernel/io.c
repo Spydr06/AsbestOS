@@ -1,5 +1,5 @@
 #include "io.h"
-#include "lib.h"
+#include <string.h>
 #include "serial.h"
 
 uint8_t* fb = (uint8_t*) 0x000B8000;
@@ -48,11 +48,10 @@ int fb_write(const char* buf, uint32_t len)
 {
     for(uint32_t i = 0; i < len; i++) {
         switch(buf[i]) {
+        case '\n':
+            cursor_pos += FB_WIDTH; // fallthrough
         case '\r':
             cursor_pos = cursor_pos / FB_WIDTH * FB_WIDTH;
-            break;
-        case '\n':
-            cursor_pos += FB_WIDTH;
             break;
         case '\t':
             cursor_pos = (cursor_pos + FB_TABSIZE) / FB_TABSIZE * FB_TABSIZE;

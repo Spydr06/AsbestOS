@@ -1,7 +1,7 @@
 #ifndef KERNEL_IO_H
 #define KERNEL_IO_H
 
-#include "types.h"
+#include <stdint.h>
 
 // framebuffer colors
 #define FB_BLACK        0
