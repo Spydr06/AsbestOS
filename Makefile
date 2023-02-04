@@ -8,6 +8,9 @@ LIBC := libc
 LIBK := libk.a
 
 QEMUFLAGS := -boot order=d -m 32M -serial stdio -display sdl
+ISOFLAGS := -R -b boot/grub/stage2_eltorito -no-emul-boot \
+			-boot-load-size 4 -A os -input-charset utf8   \
+			-boot-info-table
 
 .PHONY:
 all: $(ISO)
@@ -17,15 +20,7 @@ run: $(ISO)
 	$(QEMU) $(QEMUFLAGS) -cdrom $<
 
 $(ISO): $(BOOT)/$(KERNEL_ELF)	
-	mkisofs -R \
-            -b boot/grub/stage2_eltorito    \
-            -no-emul-boot                   \
-            -boot-load-size 4               \
-            -A os                           \
-            -input-charset utf8             \
-            -boot-info-table                \
-            -o $@	                        \
-            iso
+	mkisofs $(ISOFLAGS) -o $@ iso
 
 $(BOOT)/$(KERNEL_ELF): $(KERNEL)/$(KERNEL_ELF)
 	cp $< $@

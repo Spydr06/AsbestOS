@@ -3,3 +3,4 @@
 *.elf
 *.iso
 *.img
+.build/
