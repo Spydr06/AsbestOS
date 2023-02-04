@@ -1,28 +1,32 @@
-global loader
+.global loader
 
-MAGIC_NUMBER equ 0x1BADB002
-FLAGS        equ 0x0
-CHECKSUM     equ -MAGIC_NUMBER
-KERNEL_STACK_SIZE equ 4096
+.set MAGIC_NUMBER, 0x1BADB002
+.set FLAGS, 0x0
+.set CHECKSUM, -MAGIC_NUMBER
+.set KERNEL_STACK_SIZE, 4096
 
-section .text
-align 4
-    dd MAGIC_NUMBER
-    dd FLAGS
-    dd CHECKSUM
+.text
+.align 4
+.long MAGIC_NUMBER
+.long FLAGS
+.long CHECKSUM
 
-; kernel entry point
+# kernel entry point
+.extern kmain
+.global loader
+.type loader, @function
 loader:
-    mov eax, 0xCAFEBABE
-    mov esp, kernel_stack + KERNEL_STACK_SIZE
-    
-    extern kmain
-    call kmain ; call kernel main function
+    cli
+    mov $kernel_stack_top, %esp
+
+    # call kernel main function
+    call kmain
 
     cli
     hlt
 
-section .bss
-align 4
+.bss
+.align 4
 kernel_stack:
-    resb KERNEL_STACK_SIZE
+    .skip KERNEL_STACK_SIZE
+kernel_stack_top:

@@ -1,15 +1,16 @@
-section .text
+.text
 
-global gdt_flush
+.extern gdt_p
+.global gdt_flush
+.type gdt_flush, @function
 gdt_flush:
-    extern gdt_p
-    lgdt [gdt_p]
-    mov ax, 0x10
-    mov ds, ax
-    mov es, ax
-    mov fs, ax
-    mov gs, ax
-    mov ss, ax
-    jmp 0x08:flush_cs
+    lgdt gdt_p
+    mov $0x10, %ax
+    mov %ax, %ds
+    mov %ax, %es
+    mov %ax, %fs
+    mov %ax, %gs
+    mov %ax, %ss
+    ljmp $0x08, $flush_cs
 
 flush_cs: ret

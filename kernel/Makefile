@@ -12,11 +12,11 @@ LIBK_INCLUDE := ../libc/include
 
 # assembler, compiler flags
 CC = gcc
-AS = nasm
+AS = as
 CFLAGS  = -m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector \
 		  -O2 -nostartfiles -nodefaultlibs -Wall -Wextra -c -I$(LIBK_INCLUDE)
 LDFLAGS = -T $(LINK_SCRIPT) -melf_i386
-ASFLAGS = -f elf
+ASFLAGS = --32
 
 .PHONY:
 all: $(KERNEL_ELF)
