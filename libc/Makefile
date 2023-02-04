@@ -10,7 +10,7 @@ KERNEL_INCLUDE_DIR = ..
 
 CC = gcc
 CFLAGS = -m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector \
-		 -nostartfiles -nodefaultlibs -Wall -Wextra -c \
+		 -O2 -nostartfiles -nodefaultlibs -Wall -Wextra -c \
 		 -I$(INCLUDE_DIR) -I$(KERNEL_INCLUDE_DIR) -D__is_libk
 
 $(LIBK): $(OBJECTS)

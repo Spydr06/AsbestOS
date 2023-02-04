@@ -14,7 +14,7 @@ LIBK_INCLUDE := ../libc/include
 CC = gcc
 AS = nasm
 CFLAGS  = -m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector \
-		  -nostartfiles -nodefaultlibs -Wall -Wextra -c -I$(LIBK_INCLUDE)
+		  -O2 -nostartfiles -nodefaultlibs -Wall -Wextra -c -I$(LIBK_INCLUDE)
 LDFLAGS = -T $(LINK_SCRIPT) -melf_i386
 ASFLAGS = -f elf
 

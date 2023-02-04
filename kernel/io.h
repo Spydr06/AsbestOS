@@ -42,6 +42,7 @@ void fb_move_cursor(uint16_t pos);
 uint16_t fb_cursor_pos(void);
 
 void fb_scroll(void);
+void fb_color(uint8_t fg, uint8_t bg);
 
 int fb_write(const char* buf, uint32_t len);
 int fb_puts(const char* buf);

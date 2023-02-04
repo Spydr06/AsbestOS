@@ -1,9 +1,12 @@
 #include "io.h"
-#include <string.h>
 #include "serial.h"
+#include <string.h>
+#include "log.h"
 
 uint8_t* fb = (uint8_t*) 0x000B8000;
 uint16_t cursor_pos = 0;
+uint8_t fg_color = FB_LT_GREY;
+uint8_t bg_color = FB_BLACK;
 
 void fb_move_cursor(uint16_t pos)
 {
@@ -36,6 +39,12 @@ void fb_scroll(void)
             fb[(pos - 1) * FB_WIDTH * 2 + i] = fb[pos * FB_WIDTH * 2 + i];
 }
 
+void fb_color(uint8_t fg, uint8_t bg)
+{
+    fg_color = fg;
+    bg_color = bg;
+}
+
 void fb_delete_last_line(void)
 {
     for(int32_t x = 0; x < FB_WIDTH * 2; x++) {
@@ -57,7 +66,7 @@ int fb_write(const char* buf, uint32_t len)
             cursor_pos = (cursor_pos + FB_TABSIZE) / FB_TABSIZE * FB_TABSIZE;
             break;
         default:
-            fb_write_cell(cursor_pos++ * 2, buf[i], FB_WHITE, FB_BLACK);
+            fb_write_cell(cursor_pos++ * 2, buf[i], fg_color, bg_color);
         }
 
         if(cursor_pos / FB_WIDTH > FB_HEIGHT - 1) {
@@ -73,6 +82,7 @@ int fb_write(const char* buf, uint32_t len)
 void fb_init(void)
 {
     cursor_pos = fb_cursor_pos();
+    klog(KLOG_OK, "framebuffer initialized");
 }
 
 int fb_puts(const char* buf)
