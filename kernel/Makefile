@@ -11,18 +11,20 @@ OBJECTS := $(patsubst %, $(BUILDDIR)/%.o, $(SOURCES))
 LIBK_INCLUDE := ../libc/include
 
 # assembler, compiler flags
-CC = gcc
-AS = as
+TARGET = i686-elf-
+CC = $(TARGET)gcc
+AS = $(TARGET)as
+LD = $(TARGET)ld
 CFLAGS  = -m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector \
 		  -O2 -nostartfiles -nodefaultlibs -Wall -Wextra -c -I$(LIBK_INCLUDE)
 LDFLAGS = -T $(LINK_SCRIPT) -melf_i386
-ASFLAGS = --32
+ASFLAGS = --32 -O2
 
 .PHONY:
 all: $(KERNEL_ELF)
 
 $(KERNEL_ELF): $(OBJECTS) $(LIBK)
-	ld $(LDFLAGS) $^ -o $(KERNEL_ELF)
+	$(LD) $(LDFLAGS) $^ -o $(KERNEL_ELF)
 
 $(BUILDDIR)/%.c.o: %.c | $(BUILDDIR)
 	mkdir -p $(@D)

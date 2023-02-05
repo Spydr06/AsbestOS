@@ -48,4 +48,6 @@ int fb_write(const char* buf, uint32_t len);
 int fb_puts(const char* buf);
 void fb_init(void);
 
+void fb_keycode(uint8_t scan_code);
+
 #endif /* KERNEL_IO_H */

@@ -3,7 +3,9 @@
 #include <string.h>
 #include "log/log.h"
 
-uint8_t* fb = (uint8_t*) 0x000B8000;
+#define FB ((uint8_t*) 0x000B8000)
+
+//uint8_t* fb = (uint8_t*) 0x000B8000;
 uint16_t cursor_pos = 0;
 uint8_t fg_color = FB_LT_GREY;
 uint8_t bg_color = FB_BLACK;
@@ -28,15 +30,15 @@ uint16_t fb_cursor_pos(void)
 
 void fb_write_cell(uint32_t i, char c, uint8_t bg, uint8_t fg)
 {
-    fb[i] = c;
-    fb[i + 1] = ((fg & 0x0f) << 4) | (bg & 0x0f);
+    FB[i] = c;
+    FB[i + 1] = ((fg & 0x0f) << 4) | (bg & 0x0f);
 }
 
 void fb_scroll(void)
 {
     for(int pos = 1; pos < FB_HEIGHT; pos++)
         for(int i = 0; i < FB_WIDTH * 2; i++)
-            fb[(pos - 1) * FB_WIDTH * 2 + i] = fb[pos * FB_WIDTH * 2 + i];
+            FB[(pos - 1) * FB_WIDTH * 2 + i] = FB[pos * FB_WIDTH * 2 + i];
 }
 
 void fb_color(uint8_t fg, uint8_t bg)
@@ -48,7 +50,7 @@ void fb_color(uint8_t fg, uint8_t bg)
 void fb_delete_last_line(void)
 {
     for(int32_t x = 0; x < FB_WIDTH * 2; x++) {
-		uint8_t* ptr = fb + (FB_WIDTH * 2) * (FB_HEIGHT - 1) + x;
+		uint8_t* ptr = FB + (FB_WIDTH * 2) * (FB_HEIGHT - 1) + x;
 		*ptr = 0;
 	}
 }
