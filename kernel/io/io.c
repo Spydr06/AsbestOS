@@ -2,6 +2,7 @@
 #include "serial/serial.h"
 #include <string.h>
 #include "log/log.h"
+#include "keyboard/kb.h"
 
 #define FB ((uint8_t*) 0x000B8000)
 
@@ -67,6 +68,10 @@ int fb_write(const char* buf, uint32_t len)
         case '\t':
             cursor_pos = (cursor_pos + FB_TABSIZE) / FB_TABSIZE * FB_TABSIZE;
             break;
+        case '\b':
+            if(cursor_pos > 0)
+                fb_write_cell(--cursor_pos * 2, ' ', fg_color, bg_color);
+            break;
         default:
             fb_write_cell(cursor_pos++ * 2, buf[i], fg_color, bg_color);
         }
@@ -90,4 +95,11 @@ void fb_init(void)
 int fb_puts(const char* buf)
 {
     return fb_write(buf, strlen(buf));
+}
+
+void fb_keycode(uint8_t scan_code)
+{
+    char c = kb_get_char(scan_code);
+    if(c)
+        fb_write(&c, 1);
 }

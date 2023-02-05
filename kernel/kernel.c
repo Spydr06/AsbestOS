@@ -16,7 +16,7 @@
 
 #define X86_OK 0
 
-#define init_irq_handler(i, handler) irq_register_handler((i), (handler))
+#define init_irq_handler(i, handler) irq_register_handler((i), (handler)); klog(KLOG_INFO, "irq: handler set: " #handler "()")
 
 int x86_pc_init(void) {
     gdt_install_flat();
@@ -31,8 +31,8 @@ int x86_pc_init(void) {
     init_pic();
     klog(KLOG_NONE, "i8259 (PIC) initialized");
 
-    irq_register_handler(0, sys_tick_handler);
-    irq_register_handler(1, sys_key_handler);
+    init_irq_handler(0, sys_tick_handler);
+    init_irq_handler(1, sys_key_handler);
 
     return X86_OK;
 }

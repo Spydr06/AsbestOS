@@ -2,6 +2,7 @@
 #include "../io.h"
 #include "pic.h"
 #include "../serial/serial.h"
+#include "../io.h"
 
 #include <stdio.h>
 #include <stddef.h>
@@ -49,5 +50,5 @@ void sys_tick_handler(struct iframe *frame)
 void sys_key_handler(struct iframe *frame)
 {
     uint8_t scan_code = inb(0x60);
-    serial_write(SERIAL_COM1, "key\n", 4);
+    fb_keycode(scan_code);
 }
