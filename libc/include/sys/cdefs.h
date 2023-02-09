@@ -3,7 +3,7 @@
 
 #define __os_libc 1
 
-#ifndef __i386__
+#ifndef __i686__
     #error unsupported platform
 #endif
 

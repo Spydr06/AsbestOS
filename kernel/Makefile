@@ -12,14 +12,14 @@ OBJECTS := $(patsubst %, $(BUILDDIR)/%.o, $(SOURCES))
 LIBK_INCLUDE := ../libc/include
 
 # assembler, compiler flags
-CC = gcc
-AS = as
-LD = ld
+CC = i686-elf-gcc
+AS = i686-elf-as
+LD = i686-elf-ld
 OBJCOPY = objcopy
-CFLAGS  = -g -m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector \
+CFLAGS  = -g -nostdlib -nostdinc -fno-builtin -fno-stack-protector \
 		  -O2 -nostartfiles -nodefaultlibs -Wall -Wextra -c -I$(LIBK_INCLUDE)
-LDFLAGS = -T $(LINK_SCRIPT) -melf_i386
-ASFLAGS = --32 -O2
+LDFLAGS = -T $(LINK_SCRIPT)
+ASFLAGS = -O2
 
 .PHONY:
 all: $(KERNEL_ELF)

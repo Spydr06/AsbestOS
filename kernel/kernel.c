@@ -10,7 +10,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#if !defined(__i386__)
+#if !defined(__i686__)
     #error "Expected x86 architecture"
 #endif
 

@@ -8,13 +8,13 @@ OBJECTS := $(patsubst %, $(BUILDDIR)/%.o, $(SOURCES))
 INCLUDE_DIR = include
 KERNEL_INCLUDE_DIR = ..
 
-CC = gcc
-AS = as
-AR = ar
-CFLAGS = -m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector \
+CC = i686-elf-gcc
+AS = i686-elf-as
+AR = i686-elf-ar
+CFLAGS = -nostdlib -nostdinc -fno-builtin -fno-stack-protector \
 		 -O2 -nostartfiles -nodefaultlibs -Wall -Wextra -c \
 		 -I$(INCLUDE_DIR) -I$(KERNEL_INCLUDE_DIR) -D__is_libk -g
-ASFLAGS = --32 -O2
+ASFLAGS = -O2
 
 $(LIBK): $(OBJECTS)
 	$(AR) ruv $@ $(OBJECTS)

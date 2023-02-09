@@ -5,7 +5,8 @@ ISO := os.iso
 QEMU := qemu-system-x86_64
 
 # GDB := gdb # <- use this for the default gdb executable
-GDB := gdb-gef
+# GDB := gdb-gef
+GDB := i686-elf-gdb
 
 LIBC := libc
 LIBK := libk.a
@@ -13,7 +14,7 @@ LIBK := libk.a
 GDBFLAGS := -ex "target remote localhost:1234" \
 			-ex "symbol-file kernel/kernel.sym"
 
-QEMUFLAGS := -m 32M -serial stdio -display sdl
+QEMUFLAGS := -m 32M -serial stdio -display sdl -cpu qemu32
 ISOFLAGS := -R -b boot/grub/stage2_eltorito -no-emul-boot \
 			-boot-load-size 4 -A os -input-charset utf8   \
 			-boot-info-table
