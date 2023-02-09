@@ -4,8 +4,14 @@ KERNEL_ELF := kernel.elf
 ISO := os.iso
 QEMU := qemu-system-x86_64
 
+# GDB := gdb # <- use this for the default gdb executable
+GDB := gdb-gef
+
 LIBC := libc
 LIBK := libk.a
+
+GDBFLAGS := -ex "target remote localhost:1234" \
+			-ex "symbol-file kernel/kernel.sym"
 
 QEMUFLAGS := -m 32M -serial stdio -display sdl
 ISOFLAGS := -R -b boot/grub/stage2_eltorito -no-emul-boot \
@@ -19,8 +25,14 @@ all: $(ISO)
 run: $(ISO)
 	$(QEMU) $(QEMUFLAGS) -cdrom $< -boot order=d 
 
+.PHONY:
 run_kernel: $(KERNEL)/$(KERNEL_ELF)
 	$(QEMU) $(QEMUFLAGS) -kernel $<
+
+.PHONY:
+debug: $(ISO)
+	$(QEMU) $(QEMUFLAGS) -cdrom $< -boot order=d -s -S &
+	sudo $(GDB) $(GDBFLAGS)
 
 $(ISO): $(BOOT)/$(KERNEL_ELF)	
 	mkisofs $(ISOFLAGS) -o $@ iso

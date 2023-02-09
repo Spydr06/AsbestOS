@@ -1,6 +1,7 @@
 # files
 LINK_SCRIPT := link.ld
 KERNEL_ELF := kernel.elf
+KERNEL_SYM := kernel.sym
 LIBK := libk.a
 
 BUILDDIR := .build
@@ -11,11 +12,11 @@ OBJECTS := $(patsubst %, $(BUILDDIR)/%.o, $(SOURCES))
 LIBK_INCLUDE := ../libc/include
 
 # assembler, compiler flags
-TARGET = i686-elf-
-CC = $(TARGET)gcc
-AS = $(TARGET)as
-LD = $(TARGET)ld
-CFLAGS  = -m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector \
+CC = gcc
+AS = as
+LD = ld
+OBJCOPY = objcopy
+CFLAGS  = -g -m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector \
 		  -O2 -nostartfiles -nodefaultlibs -Wall -Wextra -c -I$(LIBK_INCLUDE)
 LDFLAGS = -T $(LINK_SCRIPT) -melf_i386
 ASFLAGS = --32 -O2
@@ -25,6 +26,8 @@ all: $(KERNEL_ELF)
 
 $(KERNEL_ELF): $(OBJECTS) $(LIBK)
 	$(LD) $(LDFLAGS) $^ -o $(KERNEL_ELF)
+	$(OBJCOPY) --only-keep-debug $(KERNEL_ELF) $(KERNEL_SYM)
+	$(OBJCOPY) --strip-debug $(KERNEL_ELF)
 
 $(BUILDDIR)/%.c.o: %.c | $(BUILDDIR)
 	mkdir -p $(@D)
@@ -41,6 +44,9 @@ $(BUILDDIR):
 clean:
 ifneq ("$(wildcard $(KERNEL_ELF))", "")
 	rm $(KERNEL_ELF)
+endif
+ifneq ("$(wildcard $(KERNEL_SYM))", "")
+	rm $(KERNEL_SYM)
 endif
 ifneq ("$(wildcard $(BUILDDIR))", "")
 	rm -r $(BUILDDIR)

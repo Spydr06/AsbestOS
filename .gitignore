@@ -1,6 +1,7 @@
 *.o
 *.a
 *.elf
+*.sym
 *.iso
 *.img
 .build/
