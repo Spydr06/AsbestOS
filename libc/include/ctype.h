@@ -21,7 +21,7 @@ int isprint(int ch);
 int ispunct(int ch);
 
 int tolower(int ch);
-int topupper(int ch);
+int toupper(int ch);
 
 #ifdef __cplusplus
 }

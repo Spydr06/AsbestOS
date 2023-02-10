@@ -39,9 +39,3 @@ void sys_tick_handler(IFrame_T* frame)
 {
     pic_send_EOI(IRQ_PIT);
 }
-
-void sys_key_handler(IFrame_T* frame)
-{
-    uint8_t scan_code = inb(0x60);
-    fb_keycode(scan_code);
-}

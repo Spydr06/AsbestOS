@@ -36,17 +36,17 @@
 
 
 
-void fb_write_cell(uint32_t i, char c, uint8_t fg, uint8_t bg);
-void fb_move_cursor(uint16_t pos);
-uint16_t fb_cursor_pos(void);
+void console_write_cell(uint32_t i, char c, uint8_t fg, uint8_t bg);
+void console_move_cursor(uint16_t pos);
+uint16_t console_cursor_pos(void);
 
-void fb_scroll(void);
-void fb_color(uint8_t fg, uint8_t bg);
+void console_scroll(void);
+void console_color(uint8_t fg, uint8_t bg);
 
-int fb_write(const char* buf, uint32_t len);
-int fb_puts(const char* buf);
-void fb_init(void);
+int console_write(const char* buf, uint32_t len);
+int console_puts(const char* buf);
+void console_init(void);
 
-void fb_keycode(uint8_t scan_code);
+void console_keycode(uint8_t scan_code);
 
 #endif /* KERNEL_IO_H */

@@ -7,7 +7,7 @@ int tolower(int ch)
     return ch;
 }
 
-int topupper(int ch)
+int toupper(int ch)
 {
     if(islower(ch))
         return ch & 0x5f;

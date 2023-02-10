@@ -1,5 +1,3 @@
-.global loader
-
 .set MAGIC_NUMBER, 0x1BADB002
 .set FLAGS, 0x0
 .set CHECKSUM, -MAGIC_NUMBER
@@ -13,9 +11,9 @@
 
 # kernel entry point
 .extern kmain
-.global loader
-.type loader, @function
-loader:
+.global _start
+.type _start, @function
+_start:
     cli
     mov $kernel_stack_top, %esp
 

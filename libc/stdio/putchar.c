@@ -7,7 +7,7 @@
 int putchar(int ic) {
 #if defined(__is_libk)
 	char c = (char) ic;
-	fb_write(&c, sizeof(c));
+	console_write(&c, sizeof(c));
 #else
 	// TODO: Implement stdio and the write system call.
 #endif

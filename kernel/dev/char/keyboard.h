@@ -3,6 +3,7 @@
 
 #define NUM_KEYS 128
 
+#include "../../sys/cpu.h"
 #include <stdint.h>
 
 typedef enum {
@@ -42,9 +43,14 @@ typedef enum {
     KEY_DELETE,
     KEY_UNKNOWN2, KEY_UNKNOWN3, KEY_UNKNOWN4,
     KEY_F11, KEY_F12,
-    KEY_UNDEFINED
+    KEY_UNDEFINED,
+
+    KEY_LEFT_SHIFT_RELEASED = 0xaa,
+    KEY_RIGHT_SHIFT_RELEASED = 0xb6,
+    KEY_CONTROL_RELEASED = 0x9d,
+    KEY_ALT_RELEASED = 0xb8
 } KeyCode_T;
 
-char kb_get_char(uint8_t scan_code);
+void sys_key_handler(IFrame_T* frame);
 
 #endif

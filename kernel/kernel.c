@@ -38,7 +38,7 @@ int x86_pc_init(void) {
 }
 
 void kmain(void) {
-    fb_init();
+    console_init();
     klog(KLOG_NONE, "kmain() at address: 0x%x", (unsigned int) kmain);
 
     serial_configure_baud_rate(SERIAL_COM1, 1);
@@ -60,7 +60,7 @@ failure:
 
 void __kpanic(const char* file, const char* function, int line)
 {
-    fb_color(FB_LT_RED, FB_BLACK);
+    console_color(FB_LT_RED, FB_BLACK);
     printf("%s:%s():%d: ", file, function, line);
     abort();
 }
