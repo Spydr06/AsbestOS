@@ -34,8 +34,7 @@
 #define FB_HIGH_BYTE_COMMAND    14
 #define FB_LOW_BYTE_COMMAND     15
 
-void outb(uint16_t port, uint8_t data);
-uint8_t inb(uint16_t port);
+
 
 void fb_write_cell(uint32_t i, char c, uint8_t fg, uint8_t bg);
 void fb_move_cursor(uint16_t pos);

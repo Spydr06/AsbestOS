@@ -1,8 +1,7 @@
 #include "irq.h"
-#include "../io.h"
-#include "pic.h"
-#include "../serial/serial.h"
-#include "../io.h"
+#include "../dev/char/console.h"
+#include "../dev/pic.h"
+#include "../dev/char/serial.h"
 
 #include <stdio.h>
 #include <stddef.h>

@@ -1,7 +1,7 @@
 #ifndef KERNEL_SERIAL_H
 #define KERNEL_SERIAL_H
 
-#include "../io.h"
+#include "../dev.h"
 
 /* The I/O ports */
 

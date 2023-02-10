@@ -1,5 +1,5 @@
 #include "pit.h"
-#include "../io.h"
+#include "dev.h"
 
 static uint32_t timer_delta_time;
 static uint32_t divisor;

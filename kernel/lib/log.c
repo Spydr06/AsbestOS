@@ -1,5 +1,5 @@
 #include "log.h"
-#include "../io.h"
+#include "../dev/char/console.h"
 #include <stdio.h>
 
 static void klog_level(KLogLevel_T level)

@@ -1,5 +1,5 @@
-#ifndef KERNEL_X86_H
-#define KERNEL_X86_H
+#ifndef KERNEL_CPU_H
+#define KERNEL_CPU_H
 
 #include <stdint.h>
 
@@ -20,4 +20,4 @@ void __kpanic(const char* file, const char* function, int line);
 #define x86_disable_int() asm volatile("cli")
 #define x86_halt() asm volatile("cli; hlt");
 
-#endif /* KERNEL_X86_H */
+#endif /* KERNEL_CPU_H */

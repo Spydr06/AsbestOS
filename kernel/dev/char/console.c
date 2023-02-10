@@ -1,8 +1,8 @@
-#include "io.h"
-#include "serial/serial.h"
+#include "console.h"
+#include "serial.h"
 #include <string.h>
-#include "log/log.h"
-#include "keyboard/kb.h"
+#include "../../lib/log.h"
+#include "keyboard.h"
 
 #define FB ((uint8_t*) 0x000B8000)
 

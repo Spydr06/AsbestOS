@@ -1,4 +1,4 @@
-#include "kb.h"
+#include "keyboard.h"
 
 static char keymap_us[NUM_KEYS] = {
     [KEY_NULL] = '\0',

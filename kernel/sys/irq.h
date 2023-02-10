@@ -1,7 +1,7 @@
 #ifndef KERNEL_IRQ_HANDLERS_H
 #define KERNEL_IRQ_HANDLERS_H
 
-#include "../../x86.h"
+#include "cpu.h"
 
 #define IRQ_PIT 0
 #define IRQ_PS2 1

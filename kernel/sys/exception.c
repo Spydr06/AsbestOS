@@ -1,7 +1,7 @@
 #include "exception.h"
-#include "io/log/log.h"
-#include "io/interrupts/irq.h"
-#include "x86.h"
+#include "../lib/log.h"
+#include "irq.h"
+#include "cpu.h"
 
 #include <stdlib.h>
 #include <stdio.h>

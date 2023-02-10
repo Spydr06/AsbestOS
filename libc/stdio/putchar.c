@@ -1,7 +1,7 @@
 #include <stdio.h>
  
 #if defined(__is_libk)
-#include <kernel/io/io.h>
+#include <kernel/dev/char/console.h>
 #endif
  
 int putchar(int ic) {

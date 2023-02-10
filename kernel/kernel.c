@@ -1,11 +1,11 @@
-#include "io/io.h"
-#include "io/serial/serial.h"
-#include "io/log/log.h"
-#include "memory/gdt.h"
-#include "io/interrupts/idt.h"
-#include "io/interrupts/irq.h"
-#include "io/interrupts/pit.h"
-#include "io/interrupts/pic.h"
+#include "dev/char/console.h"
+#include "dev/char/serial.h"
+#include "lib/log.h"
+#include "sys/gdt.h"
+#include "sys/idt.h"
+#include "sys/irq.h"
+#include "dev/pit.h"
+#include "dev/pic.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -50,9 +50,6 @@ void kmain(void) {
     
 
     x86_enable_int();
-
-
-    asm volatile("int $0x80");
 
     while(1) {}
 
