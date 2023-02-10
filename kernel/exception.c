@@ -1,6 +1,7 @@
 #include "exception.h"
 #include "io/log/log.h"
 #include "io/interrupts/irq.h"
+#include "x86.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -41,7 +42,7 @@ static char *exception_messages[] =
     "Reserved"
 };
 
-static void __attribute__((noreturn)) handle_exception(struct iframe* iframe)
+static void __attribute__((noreturn)) handle_exception(IFrame_T* iframe)
 {
     klog(KLOG_FAIL, "Exception raised: %s", exception_messages[iframe->vector]);
     printf("di: %x,\tsi: %x,\tbp: %x,\tsp: %x\n"
@@ -60,16 +61,15 @@ static void __attribute__((noreturn)) handle_exception(struct iframe* iframe)
     kpanic();
 }
 
-static inline void __attribute__((noreturn)) handle_unknown(struct iframe* iframe)
+static inline void __attribute__((noreturn)) handle_unknown(IFrame_T* iframe)
 {
     iframe->vector = 16;
     handle_exception(iframe);
 }
 
-void exception_handler(struct iframe* iframe)
+void exception_handler(IFrame_T* iframe)
 {
     uint32_t vector = iframe->vector;
-
     if(31 >= vector)
         handle_exception(iframe);
     else if(47 >= vector)

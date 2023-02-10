@@ -3,16 +3,16 @@
 
 #include <stdint.h>
 
-struct iframe {
+typedef struct {
     uint32_t di, si, bp, sp, bx, dx, cx, ax;
     uint32_t ds, es, fs, gs;
     uint32_t vector;
     uint32_t err_code;
     uint32_t ip, cs, flags;
     uint32_t user_sp, user_ss;
-} __attribute__((packed));
+} __attribute__((packed)) IFrame_T;
 
-#define kpanic() __kpanic(__FILE__, __FUNCTION__, __LINE__)
+#define kpanic() __kpanic(__FILE__, __func__, __LINE__)
 
 void __kpanic(const char* file, const char* function, int line);
 

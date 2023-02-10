@@ -31,7 +31,7 @@ int x86_pc_init(void) {
     init_pic();
     klog(KLOG_NONE, "i8259 (PIC) initialized");
 
-    init_irq_handler(0, sys_tick_handler);
+    init_irq_handler(IRQ_PIT, sys_tick_handler);
     init_irq_handler(1, sys_key_handler);
 
     return X86_OK;
@@ -48,7 +48,11 @@ void kmain(void) {
     if(x86_pc_init() != X86_OK)
         goto failure;
     
+
     x86_enable_int();
+
+
+    asm volatile("int $0x80");
 
     while(1) {}
 

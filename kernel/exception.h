@@ -3,6 +3,6 @@
 
 #include "x86.h"
 
-void exception_handler(struct iframe* iframe);
+void exception_handler(IFrame_T* iframe);
 
 #endif

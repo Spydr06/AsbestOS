@@ -5,7 +5,7 @@
 
 #include <stdint.h>
 
-enum key_code {
+typedef enum {
     KEY_NULL = 0,
     KEY_ESCAPE,
     KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7, KEY_8, KEY_9, KEY_0,
@@ -43,7 +43,7 @@ enum key_code {
     KEY_UNKNOWN2, KEY_UNKNOWN3, KEY_UNKNOWN4,
     KEY_F11, KEY_F12,
     KEY_UNDEFINED
-};
+} KeyCode_T;
 
 char kb_get_char(uint8_t scan_code);
 

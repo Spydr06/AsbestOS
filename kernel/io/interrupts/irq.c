@@ -7,9 +7,9 @@
 #include <stdio.h>
 #include <stddef.h>
 
-static void* irq_routines[16] = {0};
+static InterruptHandler_T irq_routines[16] = {0};
 
-void irq_register_handler(int irq, void (*handler)(struct iframe *))
+void irq_register_handler(int irq, InterruptHandler_T handler)
 {
     if(handler == NULL || irq < 0 || irq > 15)
         return;
@@ -23,31 +23,25 @@ void irq_unregister_handler(int irq)
     irq_routines[irq] = NULL;
 }
 
-void handle_platform_irq(struct iframe *frame)
+void handle_platform_irq(IFrame_T *frame)
 {
-    void (*handler)(struct iframe *frame);
     uint32_t irq = frame->vector - 32;
-
-    handler = irq_routines[irq];
-
-    if(handler) {
+    InterruptHandler_T handler = irq_routines[irq];
+    if(handler)
         handler(frame);
-    }
 
-    if(irq == IRQ_PIT) {
+    if(irq == IRQ_PIT)
         return;
-    }
 
     pic_send_EOI(irq);
 }
 
-void sys_tick_handler(struct iframe *frame)
+void sys_tick_handler(IFrame_T* frame)
 {
     pic_send_EOI(IRQ_PIT);
-    //serial_write(SERIAL_COM1, "tick\n", 5);
 }
 
-void sys_key_handler(struct iframe *frame)
+void sys_key_handler(IFrame_T* frame)
 {
     uint8_t scan_code = inb(0x60);
     fb_keycode(scan_code);

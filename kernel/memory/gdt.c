@@ -1,8 +1,8 @@
 #include "gdt.h"
 #include <stdlib.h>
 
-struct gdt_entry gdt[GDT_ENTRIES];
-struct gdt_ptr gdt_p;
+GDTEntry_T gdt[GDT_ENTRIES];
+GDTPointer_T gdt_p;
 
 void init_gdt_entry(int index, uint32_t base, uint32_t limit, uint8_t access, uint8_t granularity)
 {
@@ -19,7 +19,7 @@ void init_gdt_entry(int index, uint32_t base, uint32_t limit, uint8_t access, ui
 
 void gdt_install_flat(void)
 {
-    gdt_p.limit = (sizeof(struct gdt_entry) * GDT_ENTRIES) - 1;
+    gdt_p.limit = (sizeof(GDTEntry_T) * GDT_ENTRIES) - 1;
     gdt_p.base = (uint32_t) gdt;
 
     init_gdt_entry(0, 0, 0, 0, 0); // null

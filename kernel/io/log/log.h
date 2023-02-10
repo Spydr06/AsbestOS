@@ -1,15 +1,15 @@
 #ifndef KERNEL_LOG_H
 #define KERNEL_LOG_H
 
-enum klog_severity {
+typedef enum {
     KLOG_NONE,
 
     KLOG_OK,
     KLOG_INFO,
     KLOG_WARN,
     KLOG_FAIL,
-};
+} KLogLevel_T;
 
-void klog(enum klog_severity severity, const char* fmt, ...);
+void klog(KLogLevel_T level, const char* fmt, ...);
 
 #endif /* KERNEL_LOG_H */

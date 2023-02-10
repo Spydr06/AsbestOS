@@ -2,9 +2,9 @@
 #include "../io.h"
 #include <stdio.h>
 
-static void klog_severity(enum klog_severity severity)
+static void klog_level(KLogLevel_T level)
 {
-    switch(severity)
+    switch(level)
     {
     case KLOG_OK:
         fb_color(FB_GREEN, FB_BLACK);
@@ -27,12 +27,12 @@ static void klog_severity(enum klog_severity severity)
     }
 }
 
-void klog(enum klog_severity severity, const char* fmt, ...)
+void klog(KLogLevel_T level, const char* fmt, ...)
 {
     fb_color(FB_LT_GREY, FB_BLACK);
-    if(severity) {
+    if(level) {
         fb_write("[", 1);
-        klog_severity(severity);
+        klog_level(level);
         fb_color(FB_LT_GREY, FB_BLACK);
         fb_write("] ", 2);
     }
