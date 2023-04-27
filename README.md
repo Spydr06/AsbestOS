@@ -1,4 +1,4 @@
-# x86-kernel
+# AsbestOS
 
 This repository contains a little x86 kernel I'm developing to get knowledge in operating system development.
 
