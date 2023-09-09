@@ -20,6 +20,11 @@ override XORRISOFLAGS += \
 override QEMU := qemu-system-x86_64
 override QEMUFLAGS := -m 2G -serial stdio -display sdl -cpu qemu64
 
+override GDB := gdb
+override GDBFLAGS := \
+	-ex "target remote localhost:1234" \
+	-ex "symbol-file $(KERNEL_DIR)/kernel.sym"
+
 .PHONY:
 all: $(ISO)
 
