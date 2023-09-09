@@ -1,23 +1,24 @@
-KERNEL := ./kernel
-BOOT := ./iso/boot
+KERNEL_DIR := ./kernel
+LIMINE_DIR := ./limine
+ISOROOT_DIR := ./iso_root
+
 KERNEL_ELF := kernel.elf
-ISO := os.iso
-QEMU := qemu-system-i386
 
-# GDB := gdb # <- use this for the default gdb executable
-# GDB := gdb-gef
-GDB := i686-elf-gdb
+override ISO := asbestos.iso
 
-LIBC := libc
-LIBK := libk.a
+override XORRISO := xorriso
+override XORRISOFLAGS += \
+	-as mkisofs -b limine-bios-cd.bin \
+	-no-emul-boot \
+	-boot-load-size 4 \
+	-boot-info-table \
+	--efi-boot limine-uefi-cd.bin \
+	-efi-boot-part \
+	--efi-boot-image \
+	--protective-msdos-label
 
-GDBFLAGS := -ex "target remote localhost:1234" \
-			-ex "symbol-file kernel/kernel.sym"
-
-QEMUFLAGS := -m 128M -serial stdio -display sdl -cpu qemu32
-ISOFLAGS := -R -b boot/grub/stage2_eltorito -no-emul-boot \
-			-boot-load-size 4 -A os -input-charset utf8   \
-			-boot-info-table
+override QEMU := qemu-system-x86_64
+override QEMUFLAGS := -m 2G -serial stdio -display sdl -cpu qemu64
 
 .PHONY:
 all: $(ISO)
@@ -27,7 +28,7 @@ run: $(ISO)
 	$(QEMU) $(QEMUFLAGS) -cdrom $< -boot order=d 
 
 .PHONY:
-run_kernel: $(KERNEL)/$(KERNEL_ELF)
+run_kernel: $(KERNEL_DIR)/$(KERNEL_ELF)
 	$(QEMU) $(QEMUFLAGS) -kernel $<
 
 .PHONY:
@@ -35,28 +36,38 @@ debug: $(ISO)
 	$(QEMU) $(QEMUFLAGS) -cdrom $< -boot order=d -s -S &
 	sudo $(GDB) $(GDBFLAGS)
 
-$(ISO): $(BOOT)/$(KERNEL_ELF)	
-	mkisofs $(ISOFLAGS) -o $@ iso
+$(ISO): $(ISOROOT_DIR)/$(KERNEL_ELF) | $(LIMINE_DIR)
+	cp -v limine.cfg 					 \
+		$(LIMINE_DIR)/limine-bios.sys 	 \
+      	$(LIMINE_DIR)/limine-bios-cd.bin \
+		$(LIMINE_DIR)/limine-uefi-cd.bin \
+		$(ISOROOT_DIR)
+	cp -v \
+		$(LIMINE_DIR)/BOOTX64.EFI \
+		$(LIMINE_DIR)/BOOTIA32.EFI \
+		$(ISOROOT_DIR)/EFI/BOOT
+	$(XORRISO) $(XORRISOFLAGS) $(ISOROOT_DIR) -o $@
 
-$(BOOT)/$(KERNEL_ELF): $(KERNEL)/$(KERNEL_ELF)
-	cp $< $@
+$(LIMINE_DIR):
+	git submodule init $(LIMINE_DIR)
 
-$(KERNEL)/$(KERNEL_ELF): $(KERNEL)/$(LIBK)
-	$(MAKE) -C $(KERNEL) $(KERNEL_ELF)
+$(ISOROOT_DIR)/$(KERNEL_ELF): $(KERNEL_DIR)/$(KERNEL_ELF) | $(ISOROOT_DIR)
+	cp -v $< $@
 
-$(KERNEL)/$(LIBK): $(LIBC)/$(LIBK)
-	cp $< $@
+$(KERNEL_DIR)/$(KERNEL_ELF): $(KERNEL_DIR)/$(LIBK)
+	$(MAKE) -C $(KERNEL_DIR) $(KERNEL_ELF)
 
-$(LIBC)/$(LIBK):
-	$(MAKE) -C $(LIBC) $(LIBK)
+$(ISOROOT_DIR):
+	mkdir -v $@
+	mkdir -v -p $@/EFI/BOOT
 
 .PHONY:
 clean:
-	$(MAKE) -C $(KERNEL) $(MAKECMDGOALS)
-	$(MAKE) -C $(LIBC) $(MAKECMDGOALS)
+	$(MAKE) -C $(KERNEL_DIR) $(MAKECMDGOALS)
 ifneq ("$(wildcard $(BOOT)/$(KERNEL_ELF))", "")
 	rm $(BOOT)/$(KERNEL_ELF)
 endif
 ifneq ("$(wildcard $(ISO))", "")
 	rm $(ISO)
 endif
+	rm -rf $(ISOROOT_DIR)
