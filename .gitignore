@@ -5,5 +5,8 @@
 *.iso
 *.img
 .build/
-vgcore.*
+.cache/
 .vscode/
+vgcore.*
+compile_commands.json
+iso_root/
