@@ -7,57 +7,82 @@ ENTRY(_start)
  
 /* Define the program headers we want so the bootloader gives us the right */
 /* MMU permissions */
-PHDRS
-{
-    text    PT_LOAD    FLAGS((1 << 0) | (1 << 2)) ; /* Execute + Read */
-    rodata  PT_LOAD    FLAGS((1 << 2)) ;            /* Read only */
-    data    PT_LOAD    FLAGS((1 << 1) | (1 << 2)) ; /* Write + Read */
-    dynamic PT_DYNAMIC FLAGS((1 << 1) | (1 << 2)) ; /* Dynamic PHDR for relocations */
-}
- 
 SECTIONS
 {
-    /* We wanna be placed in the topmost 2GiB of the address space, for optimisations */
-    /* and because that is what the Limine spec mandates. */
-    /* Any address in this region will do, but often 0xffffffff80000000 is chosen as */
-    /* that is the beginning of the region. */
-    . = 0xffffffff80000000;
- 
-    .text : {
-        *(.text .text.*)
-    } :text
- 
-    /* Move to the next memory page for .rodata */
-    . += CONSTANT(MAXPAGESIZE);
- 
-    .rodata : {
-        *(.rodata .rodata.*)
-    } :rodata
- 
-    /* Move to the next memory page for .data */
-    . += CONSTANT(MAXPAGESIZE);
- 
-    .data : {
-        *(.data .data.*)
-    } :data
- 
-    /* Dynamic section for relocations, both in its own PHDR and inside data PHDR */
-    .dynamic : {
-        *(.dynamic)
-    } :data :dynamic
- 
-    /* NOTE: .bss needs to be the last thing mapped to :data, otherwise lots of */
-    /* unnecessary zeros will be written to the binary. */
-    /* If you need, for example, .init_array and .fini_array, those should be placed */
-    /* above this. */
-    .bss : {
-        *(.bss .bss.*)
-        *(COMMON)
-    } :data
- 
-    /* Discard .note.* and .eh_frame since they may cause issues on some hosts. */
-    /DISCARD/ : {
-        *(.eh_frame)
-        *(.note .note.*)
-    }
+  PROVIDE(_ELF_START_ = . + 0x100000);
+  PROVIDE(_LOAD_START_ = _ELF_START_);
+  . = _ELF_START_;
+
+  .multiboot (_ELF_START_): {
+      PROVIDE(_MULTIBOOT_START_ = .);
+      KEEP(*(.multiboot))
+   }
+
+  .text ALIGN(0x10) :
+  {
+    _TEXT_START_ = .;
+    *(.text*)
+    *(.gnu.linkonce.t*)
+    _TEXT_END_ = .;
+  }
+
+  .rodata :
+  {
+    _RODATA_START_ = .;
+    *(.rodata*)
+    *(.gnu.linkonce.r*)
+    _RODATA_END_ = .;
+  }
+
+  .init_array :
+  {
+    PROVIDE_HIDDEN (__init_array_start = .);
+    KEEP (*(SORT_BY_INIT_PRIORITY(.init_array.*) SORT_BY_INIT_PRIORITY(.ctors.*)))
+    KEEP (*(.init_array .ctors))
+    PROVIDE_HIDDEN (__init_array_end = .);
+  }
+  /*.fini_array :
+  {
+    PROVIDE_HIDDEN (__fini_array_start = .);
+    KEEP (*(SORT_BY_INIT_PRIORITY(.fini_array.*) SORT_BY_INIT_PRIORITY(.dtors.*)))
+    KEEP (*(.fini_array EXCLUDE_FILE (*crtbegin.o *crtbegin?.o *crtend.o *crtend?.o ) .dtors))
+    PROVIDE_HIDDEN (__fini_array_end = .);
+  }*/
+
+  /* For stack unwinding (exception handling)  */
+  .eh_frame_hdr ALIGN(0x8):
+  {
+    KEEP(*(.eh_frame_hdr*))
+  }
+  .eh_frame ALIGN(0x8):
+  {
+  	PROVIDE (__eh_frame_start = .);
+    KEEP(*(.eh_frame))
+    LONG (0);
+  }
+  .gcc_except_table :
+  {
+    *(.gcc_except_table)
+  }
+
+  .data :
+  {
+    _DATA_START_ = .;
+    *(.data*)
+    *(.gnu.linkonce.d*)
+    _DATA_END_ = .;
+  }
+
+  PROVIDE(_LOAD_END_ = .);
+
+  .bss :
+  {
+    _BSS_START_ = .;
+    *(.bss .bss.* .gnu.linkonce.b.*)
+    *(COMMON)
+    _BSS_END_ = .;
+  }
+
+  . = ALIGN(0x10);
+  _end = .;
 }
